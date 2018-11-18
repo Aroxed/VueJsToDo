@@ -1,0 +1,32 @@
+<html>
+  <body>
+    <div id="app">
+      <p v-for="todo in todos">
+          <todoitem :id=todo.id :title=todo.title :completed=todo.completed></todoitem>
+      </p>
+    </div>
+    <script src="https://unpkg.com/vue"></script>
+    <script>
+        const ToDoItem = {
+        template: '<div><input type="checkbox" v-model="completed"/>{{ id }}: {{ title }}</div>',
+        props: ['id', 'title', 'completed']
+        }
+
+        new Vue({
+            el: '#app',
+            data: { todos: [] },
+            components: {'todoitem': ToDoItem},
+            mounted() {
+                this.loadToDos();                    
+            },
+            methods: {
+                loadToDos() {
+                    fetch('https://jsonplaceholder.typicode.com/todos/')
+                        .then(response => response.json())
+                        .then(json => this.todos = json.slice(0,5))
+                }
+            }
+        })
+    </script>
+  </body>
+</html>
